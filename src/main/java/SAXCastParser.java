@@ -69,7 +69,7 @@ public class SAXCastParser extends DefaultHandler {
     private void writeData() { //change this to WRITE TO FILE METHOD
         try {
             FileWriter myWriter = new FileWriter("Cast.sql", false);
-            myWriter.write("USE parseTest;\n");
+            myWriter.write("USE moviedb2;\n");
             myWriter.write("BEGIN; -- start transaction\n");
             System.out.println("No of cast lines '" + myMovies.size() + "'.");
 
