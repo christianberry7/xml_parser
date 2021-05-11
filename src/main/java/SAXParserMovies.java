@@ -70,7 +70,7 @@ public class SAXParserMovies extends DefaultHandler {
         System.out.println(movies.size());
         try {
             FileWriter myWriter = new FileWriter("Movies.sql", false);
-            myWriter.write("USE parseTest;\n");
+            myWriter.write("USE moviedb2;\n");
             myWriter.write("BEGIN; -- start transaction\n");
             //System.out.println("No of actors '" + myActors.size() + "'.");
 
