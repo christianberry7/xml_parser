@@ -72,10 +72,16 @@ public class SAXCastParser extends DefaultHandler {
             myWriter.write("USE moviedb2;\n");
             myWriter.write("BEGIN; -- start transaction\n");
             System.out.println("No of cast lines '" + myMovies.size() + "'.");
-
+            int count = 6000;
+            int i = 0;
             Iterator<Movie> it = myMovies.iterator();
             while (it.hasNext()) {
                 myWriter.write(it.next().toCastString() + "\n");
+                if(i++ == count){
+                    i = 0;
+                    myWriter.write("COMMIT;\n");
+                    myWriter.write("BEGIN;\n");
+                }
             }
             myWriter.write("COMMIT;\n");
             myWriter.close();
