@@ -73,7 +73,7 @@ public class SAXParserExample extends DefaultHandler { // Parsing actors xml fil
     private void writeData() { //change this to WRITE TO FILE METHOD
         try {
             FileWriter myWriter = new FileWriter("Actors.sql", false);
-            myWriter.write("USE parseTest;\n");
+            myWriter.write("USE moviedb2;\n");
             myWriter.write("BEGIN; -- start transaction\n");
             //System.out.println("No of actors '" + myActors.size() + "'.");
 
