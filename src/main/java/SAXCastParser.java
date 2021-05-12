@@ -7,15 +7,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 
 public class SAXCastParser extends DefaultHandler {
 
@@ -23,27 +17,11 @@ public class SAXCastParser extends DefaultHandler {
 
     private String tempVal;
 
-    private Connection conn;
-
     //to maintain context
     private Movie tempMovie;
-    private DataSource dataSource;
 
     public SAXCastParser() {
         myMovies = new ArrayList<Movie>();
-        conn = null;
-        String jdbcURL="jdbc:mysql://localhost:3306/moviedb2";
-        try {
-            conn = DriverManager.getConnection(jdbcURL,"mytestuser", "My6$Password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-//        try {
-//            conn.
-//            //dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb2");
-//        } catch (NamingException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public void runExample() {
@@ -90,58 +68,27 @@ public class SAXCastParser extends DefaultHandler {
 
     private void writeData() { //change this to WRITE TO FILE METHOD
         try {
-            //Connection conn = dataSource.getConnection();
-            Statement statement = conn.createStatement();
             FileWriter myWriter = new FileWriter("Cast.sql", false);
             myWriter.write("USE moviedb2;\n");
             myWriter.write("BEGIN; -- start transaction\n");
             System.out.println("No of cast lines '" + myMovies.size() + "'.");
-            String mov_query = "SELECT COUNT(*) as cnt from movies m where m.id = ";
-            String star_query = "SELECT COUNT(*) as cnt from stars s where lower(s.name) = lower(";
-
-            // Perform the query
-            ResultSet rs = null;
-
-            boolean step2;
-
+            int count = 600;
+            int i = 0;
             Iterator<Movie> it = myMovies.iterator();
             while (it.hasNext()) {
-                step2 = false;
-                Movie m = it.next();
-                rs = statement.executeQuery(mov_query + m.getId());
-                if (rs.next()) {
-                    String count = rs.getString("cnt");
-                    if (!count.equals("1")){
-                        System.out.println("Error! movie id:" + m.getId() + " could not be added because the movie does not exist in our movies table");
-                        step2 = true;
-                    }
-                }
-                if (step2){
-                    for (String s: m.getStarIds()) {
-                        rs = statement.executeQuery(star_query + s.toLowerCase() + ")");
-                        if (rs.next()) {
-                            String count = rs.getString("cnt");
-                            if (!count.equals("1")){
-                                System.out.println("Error! movie id:" + m.getId() + " could not be added because there are multiple actors with the same name");
-                            }
-                            else{
-                                myWriter.write(Movie.write_it(m.getId(), s));
-                            }
-                        }
-                    }
-
+                myWriter.write(it.next().toCastString() + "\n");
+                if(i++ == count){
+                    i = 0;
+                    myWriter.write("COMMIT;\n");
+                    myWriter.write("BEGIN;\n");
                 }
             }
-            rs.close();
             myWriter.write("COMMIT;\n");
             myWriter.close();
-            statement.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-        } catch (Exception e){
-            System.out.println("Not an IO error");
         }
 
 
