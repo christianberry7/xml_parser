@@ -99,6 +99,7 @@ public class Movie {
         usedKeys.add(getId());
         // if any are null include in our problems file or whatever
         sb.append("INSERT INTO movies VALUES (\"" + getId() + "\", \"" + getTitle() + "\", " + getYear() + ", \"" + getDirector() + "\");\n");
+        sb.append("INSERT INTO ratings VALUES (\"" + getId() + "\", 0.0, 0);\n");
         for (String g: genreIds){
 
             if (!includedGenres.contains(g)) {
