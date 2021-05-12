@@ -123,7 +123,7 @@ public class Movie {
 
         // if any are null include in our problems file or whatever
         for (String s: starIds) {
-            sb.append("INSERT INTO stars_in_movies VALUES (\"" + getId() + "\", \"");
+            sb.append("CALL add_cast(\"" + getId() + "\", \"");
             if (s.contains("\"")){
                 s = s.replace("\"", "\'");
             }
@@ -136,23 +136,6 @@ public class Movie {
             sb.append(s);
             sb.append("\");\n");
         }
-        return sb.toString();
-    }
-
-    public static String write_it(String mov, String s){
-        StringBuffer sb = new StringBuffer();
-        sb.append("INSERT INTO stars_in_movies VALUES (\"" + mov + "\", \"");
-        if (s.contains("\"")){
-            s = s.replace("\"", "\'");
-        }
-        if(s.contains("`")){
-            s = s.replace("`", "\'");
-        }
-        if(s.contains("\\")){
-            s = s.replace("\\", "");
-        }
-        sb.append(s);
-        sb.append("\");\n");
         return sb.toString();
     }
 }
