@@ -7,6 +7,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,9 +15,6 @@ import java.util.List;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 
 public class SAXCastParser extends DefaultHandler {
@@ -25,17 +23,27 @@ public class SAXCastParser extends DefaultHandler {
 
     private String tempVal;
 
+    private Connection conn;
+
     //to maintain context
     private Movie tempMovie;
     private DataSource dataSource;
 
     public SAXCastParser() {
         myMovies = new ArrayList<Movie>();
+        conn = null;
+        String jdbcURL="java:comp/env/jdbc/moviedb2";
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb2");
-        } catch (NamingException e) {
+            conn = DriverManager.getConnection(jdbcURL,"mytestuser", "My6$Password");
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+//        try {
+//            conn.
+//            //dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb2");
+//        } catch (NamingException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void runExample() {
@@ -82,7 +90,7 @@ public class SAXCastParser extends DefaultHandler {
 
     private void writeData() { //change this to WRITE TO FILE METHOD
         try {
-            Connection conn = dataSource.getConnection();
+            //Connection conn = dataSource.getConnection();
             Statement statement = conn.createStatement();
             FileWriter myWriter = new FileWriter("Cast.sql", false);
             myWriter.write("USE moviedb2;\n");
