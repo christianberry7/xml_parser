@@ -32,7 +32,7 @@ public class SAXCastParser extends DefaultHandler {
     public SAXCastParser() {
         myMovies = new ArrayList<Movie>();
         conn = null;
-        String jdbcURL="java:comp/env/jdbc/moviedb2";
+        String jdbcURL="jdbc:mysql://localhost:3306/moviedb2";
         try {
             conn = DriverManager.getConnection(jdbcURL,"mytestuser", "My6$Password");
         } catch (SQLException e) {
