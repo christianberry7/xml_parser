@@ -27,7 +27,7 @@ public class log_processing {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        return "average TS: " + averageTS + " average TJ: " + averageTJ;
+        return "sum TS: " + TS + " sum TJ: " + TJ + " count: " + count;
     }
 
     public static void main(String[] args) {
