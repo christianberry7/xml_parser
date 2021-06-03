@@ -1,4 +1,3 @@
-import org.codehaus.plexus.util.StringUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -15,7 +14,7 @@ public class log_processing {
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
-                String split[]= StringUtils.split(myReader.nextLine());
+                String split[]= myReader.nextLine().split(" ");
                 TS += Long.parseLong(split[0]);
                 TJ += Long.parseLong(split[1]);
                 count++;
